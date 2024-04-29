@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="Vehiculo">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../Vehiculo/Vehiculo/out/artifacts/Vehiculo_jar/Vehiculo.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Vehiculo/out/artifacts/Vehiculo_jar/Vehiculo.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -211,10 +211,24 @@ public class LaminaCarrera extends JPanel {
             car1.setEjecuciones(0);
             car2.setEjecuciones(0);
             car3.setEjecuciones(0);
+//            car1.setPreparado(true);
+//            car2.setPreparado(true);
+//            car3.setPreparado(true);
+            System.out.println("vehiculo1: "+car1.isPreparado());
+            if(car1.isPreparado()){
+                System.out.println("Hola");
+                car1.Arrancar(x1,y1,anchoPanel,true);
+            }
+            if(car2.isPreparado()){
+                car2.Arrancar(x2,y2,anchoPanel,true);
+            }
+            if(car3.isPreparado()){
+                car3.Arrancar(x3,y3,anchoPanel,true);
+            }
 
-            car1.Arrancar(x1,y1,anchoPanel,true);
-            car2.Arrancar(x2,y2,anchoPanel,true);
-            car3.Arrancar(x3,y3,anchoPanel,true);
+
+
+
 
         });
 

@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class VentanaEleccionCocheV2 extends JFrame {
     private LaminaCarrera laminaCarrera;
@@ -10,6 +11,7 @@ public class VentanaEleccionCocheV2 extends JFrame {
 
 
     public VentanaEleccionCocheV2(LaminaCarrera laminaCarrera, Vehiculo car) {
+        //File bicicleta=new File("image/bicicleta.png");
 
         getContentPane().setLayout(new GridLayout(5, 1));
         setTitle("Elegir Vehiculo");
@@ -38,6 +40,9 @@ public class VentanaEleccionCocheV2 extends JFrame {
             radioButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     if (radioButton.isSelected()) {
+
+                        car.setImageUrl(icon.toString());
+
                         image=iconRedimensionado.getImage();
                         laminaCarrera.updatePanelImage(image,car);
                     }
