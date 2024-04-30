@@ -84,7 +84,7 @@ public class LaminaCarrera extends JPanel {
         panelApuestas.add(labelVictorias);
         panelApuestas.add(labelDerrotas);
 
-
+//
 
 
         btnIniciar =new JButton("Iniciar");
