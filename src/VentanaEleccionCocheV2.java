@@ -27,7 +27,7 @@ public class VentanaEleccionCocheV2 extends JFrame {
                 new ImageIcon("image/carrito_Bebe.png"),
                 new ImageIcon("image/ferrari6.png"),
                 new ImageIcon("image/moto.png"),
-                new ImageIcon("image/nave.png")
+                new ImageIcon("image/naveJuego.png")
         };
 
         for (ImageIcon icon : icons) {

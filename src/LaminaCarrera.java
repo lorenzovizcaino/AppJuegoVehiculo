@@ -99,7 +99,7 @@ public class LaminaCarrera extends JPanel {
         btnReiniciar.setEnabled(false);
         btnAcelerarFrenar.setEnabled(false);
 
-        btnMostrarTiempos =new JButton("Mostrar Tiempos");
+        btnMostrarTiempos =new JButton("Mostrar Tiempos y Apuestas");
         btnMostrarTiempos.setEnabled(false);
 
         labelWinner1=new JLabel(iconWinnerredimensionado);
@@ -211,19 +211,27 @@ public class LaminaCarrera extends JPanel {
             car1.setEjecuciones(0);
             car2.setEjecuciones(0);
             car3.setEjecuciones(0);
-//            car1.setPreparado(true);
-//            car2.setPreparado(true);
-//            car3.setPreparado(true);
+
             System.out.println("vehiculo1: "+car1.isPreparado());
             if(car1.isPreparado()){
                 System.out.println("Hola");
                 car1.Arrancar(x1,y1,anchoPanel,true);
+            }else{
+                car1.setCarreraTerminada(true);
+                car1.setTiempoCarrera(5000000);
             }
             if(car2.isPreparado()){
                 car2.Arrancar(x2,y2,anchoPanel,true);
+            }else{
+                car2.setCarreraTerminada(true);
+                car2.setTiempoCarrera(5000000);
             }
             if(car3.isPreparado()){
                 car3.Arrancar(x3,y3,anchoPanel,true);
+
+            }else{
+                car3.setCarreraTerminada(true);
+                car3.setTiempoCarrera(5000000);
             }
 
 
@@ -260,12 +268,32 @@ public class LaminaCarrera extends JPanel {
             car1.IniciarPosicion(x1,y1);
             car2.IniciarPosicion(x2,y2);
             car3.IniciarPosicion(x3,y3);
+
+
+            car1.setImageUrl(car1.getImageUrl());
+            car2.setImageUrl(car2.getImageUrl());
+            car3.setImageUrl(car3.getImageUrl());
+
             tfTiempo1.setText("");
             tfTiempo2.setText("");
             tfTiempo3.setText("");
             car1.setEjecuciones(0);
             car2.setEjecuciones(0);
             car3.setEjecuciones(0);
+
+            btnReanudar.setEnabled(false);
+            btnReiniciar.setEnabled(false);
+            btnAcelerarFrenar.setEnabled(false);
+            btnParar.setEnabled(false);
+            btnIniciar.setEnabled(false);
+
+            btnMostrarTiempos.setEnabled(false);
+
+
+
+
+
+
         });
 
         btnElegir1.addActionListener(e->{
@@ -290,9 +318,24 @@ public class LaminaCarrera extends JPanel {
         });
         btnMostrarTiempos.addActionListener(e->{
             if(car1.isCarreraTerminada() && car2.isCarreraTerminada() && car3.isCarreraTerminada()){
-                tfTiempo1.setText(String.valueOf(car1.getTiempoCarrera()/1000)+" Seg.");
-                tfTiempo2.setText(String.valueOf(car2.getTiempoCarrera()/1000)+" Seg.");
-                tfTiempo3.setText(String.valueOf(car3.getTiempoCarrera()/1000)+" Seg.");
+
+                if(car1.getTiempoCarrera()==5000000.0){
+                    tfTiempo1.setText("Averiado");
+                }else{
+                    tfTiempo1.setText(String.valueOf(car1.getTiempoCarrera()/1000)+" Seg.");
+                }
+                if(car2.getTiempoCarrera()==5000000.0){
+                    tfTiempo2.setText("Averiado");
+                }else{
+                    tfTiempo2.setText(String.valueOf(car2.getTiempoCarrera()/1000)+" Seg.");
+                }
+                if(car3.getTiempoCarrera()==5000000.0){
+                    tfTiempo3.setText("Averiado");
+                }else{
+                    tfTiempo3.setText(String.valueOf(car3.getTiempoCarrera()/1000)+" Seg.");
+                }
+
+
                 car1.setCarreraTerminada(false);
                 car2.setCarreraTerminada(false);
                 car3.setCarreraTerminada(false);
