@@ -2,6 +2,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -23,12 +25,16 @@ public class LaminaCarrera extends JPanel {
     private JLabel labelWinner1, labelWinner2, labelWinner3, labelGameOver;
     private JLabel labelDineroDisponble, labelMiApuesta;
     private JLabel labelVictorias, labelDerrotas;
+    private JLabel labelSemRojo,labelSemAmbar, labelSemVerde;
     private JComboBox comboapostar;
 
     private GBCConstrains gbc=new GBCConstrains();
     private int x1,y1,x2,y2,x3,y3,anchoPanel;
     private Image image;
-    private ImageIcon icon=new ImageIcon("image/winner.png");
+    private ImageIcon iconWinner =new ImageIcon("image/winner.png");
+    private ImageIcon iconSemRojo =new ImageIcon("image/rojo.png");
+    private ImageIcon iconSemAmbar =new ImageIcon("image/ambar.png");
+    private ImageIcon iconSemVerde =new ImageIcon("image/verde.png");
     private File imagenCarretera=new File("image/carretera4.png");
     private ImageIcon imagenGameOver=new ImageIcon("image/gameOver.PNG");
     private String ruta;
@@ -45,7 +51,10 @@ public class LaminaCarrera extends JPanel {
         y2=570;
         x3=100;
         y3=790;
-        Icon iconWinnerredimensionado=redimensionarIcono(icon,120,100);
+        Icon iconWinnerRedimensionado=redimensionarIcono(iconWinner,120,100);
+        Icon iconSemRojoRedimensionado=redimensionarIcono(iconSemRojo,120,100);
+        Icon iconSemAmbarRedimensionado=redimensionarIcono(iconSemAmbar,120,100);
+        Icon iconSemVerdeRedimensionado=redimensionarIcono(iconSemVerde,120,100);
         Icon iconGameOverRedimensionado=redimensionarIcono(imagenGameOver,700,600);
         try {
             image= ImageIO.read(imagenCarretera).getScaledInstance(1600,1050,Image.SCALE_SMOOTH);
@@ -62,6 +71,7 @@ public class LaminaCarrera extends JPanel {
         panelElegirVehiculos.add(btnElegir3);
 
         panelApuestas=new JPanel(new GridLayout(8,1));
+
         comboapostar=new JComboBox<>();
         comboapostar.addItem("Vehiculo 1");
         comboapostar.addItem("Vehiculo 2");
@@ -102,9 +112,20 @@ public class LaminaCarrera extends JPanel {
         btnMostrarTiempos =new JButton("Mostrar Tiempos y Apuestas");
         btnMostrarTiempos.setEnabled(false);
 
-        labelWinner1=new JLabel(iconWinnerredimensionado);
-        labelWinner2=new JLabel(iconWinnerredimensionado);
-        labelWinner3=new JLabel(iconWinnerredimensionado);
+        labelSemRojo=new JLabel(iconSemRojoRedimensionado);
+        labelSemAmbar=new JLabel(iconSemAmbarRedimensionado);
+        labelSemVerde=new JLabel(iconSemVerdeRedimensionado);
+        labelSemRojo.setBounds(350,20,120,100);
+        labelSemAmbar.setBounds(350,20,120,100);
+        labelSemVerde.setBounds(350,20,120,100);
+        SemaforosAFalse();
+
+
+
+
+        labelWinner1=new JLabel(iconWinnerRedimensionado);
+        labelWinner2=new JLabel(iconWinnerRedimensionado);
+        labelWinner3=new JLabel(iconWinnerRedimensionado);
         labelWinner1.setBounds(x1,y1,120,100);
         labelWinner2.setBounds(x2,y2,120,100);
         labelWinner3.setBounds(x3,y3,120,100);
@@ -149,6 +170,9 @@ public class LaminaCarrera extends JPanel {
         panelCarrera.add(labelWinner1);
         panelCarrera.add(labelWinner2);
         panelCarrera.add(labelWinner3);
+        panelCarrera.add(labelSemRojo);
+        panelCarrera.add(labelSemAmbar);
+        panelCarrera.add(labelSemVerde);
         panelCarrera.add(labelGameOver);
 
         panelTiempos=new JPanel(new GridLayout(7,1));
@@ -196,43 +220,63 @@ public class LaminaCarrera extends JPanel {
 
 
         btnIniciar.addActionListener(e->{
-//            try {
-//                Thread.sleep(3000);
-//            } catch (InterruptedException ex) {
-//                throw new RuntimeException(ex);
-//            }
-            labelWinner1.setVisible(false);
-            labelWinner2.setVisible(false);
-            labelWinner3.setVisible(false);
-            tfTiempo1.setText("");
-            tfTiempo2.setText("");
-            tfTiempo3.setText("");
-            anchoPanel=panelCarrera.getWidth();
-            car1.setEjecuciones(0);
-            car2.setEjecuciones(0);
-            car3.setEjecuciones(0);
+            IniciarParametros();
 
-            System.out.println("vehiculo1: "+car1.isPreparado());
-            if(car1.isPreparado()){
-                System.out.println("Hola");
-                car1.Arrancar(x1,y1,anchoPanel,true);
-            }else{
-                car1.setCarreraTerminada(true);
-                car1.setTiempoCarrera(5000000);
-            }
-            if(car2.isPreparado()){
-                car2.Arrancar(x2,y2,anchoPanel,true);
-            }else{
-                car2.setCarreraTerminada(true);
-                car2.setTiempoCarrera(5000000);
-            }
-            if(car3.isPreparado()){
-                car3.Arrancar(x3,y3,anchoPanel,true);
+            /*
+            Se intento realizar la operacion de los semaforos con Thread.sleep(xxx), pero parece ser que si se ejecuta el sleep en el hilo de eventos
+            de Swing se bloquea este, por eso se creo un temporizador con la clase Timer ya que si permite ejecutar acciones en el hilo de eventos de Swing.
+             */
 
-            }else{
-                car3.setCarreraTerminada(true);
-                car3.setTiempoCarrera(5000000);
-            }
+
+            Timer timer = new Timer(1000, new ActionListener() {
+                int segundo = 0;
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    switch (segundo) {
+                        case 0:
+                            labelSemRojo.setVisible(true);
+                            break;
+                        case 1:
+                            labelSemRojo.setVisible(false);
+                            labelSemAmbar.setVisible(true);
+                            break;
+                        case 2:
+                            labelSemAmbar.setVisible(false);
+                            labelSemVerde.setVisible(true);
+                            if(car1.isPreparado()){
+
+                                car1.Arrancar(x1,y1,anchoPanel,true);
+                            }else{
+                                car1.setCarreraTerminada(true);
+                                car1.setTiempoCarrera(5000000);
+                            }
+                            if(car2.isPreparado()){
+                                car2.Arrancar(x2,y2,anchoPanel,true);
+                            }else{
+                                car2.setCarreraTerminada(true);
+                                car2.setTiempoCarrera(5000000);
+                            }
+                            if(car3.isPreparado()){
+                                car3.Arrancar(x3,y3,anchoPanel,true);
+
+                            }else{
+                                car3.setCarreraTerminada(true);
+                                car3.setTiempoCarrera(5000000);
+                            }
+                            break;
+                        case 3:
+                            ((Timer) e.getSource()).stop(); // Detener el temporizador después de mostrar el verde
+                            break;
+                    }
+                    segundo++;
+                }
+            });
+
+            timer.start();
+
+
+
 
 
 
@@ -262,6 +306,7 @@ public class LaminaCarrera extends JPanel {
         });
 
         btnReiniciar.addActionListener(e->{
+            SemaforosAFalse();
             labelWinner1.setVisible(false);
             labelWinner2.setVisible(false);
             labelWinner3.setVisible(false);
@@ -415,6 +460,35 @@ public class LaminaCarrera extends JPanel {
 
 
 
+    }
+
+    private void IniciarParametros() {
+        SemaforosAFalse();
+        labelWinner1.setVisible(false);
+        labelWinner2.setVisible(false);
+        labelWinner3.setVisible(false);
+        tfTiempo1.setText("");
+        tfTiempo2.setText("");
+        tfTiempo3.setText("");
+        anchoPanel=panelCarrera.getWidth();
+        car1.setEjecuciones(0);
+        car2.setEjecuciones(0);
+        car3.setEjecuciones(0);
+        car1.setPosicionX(x1);
+        car1.setPosicionY(y1);
+        car2.setPosicionX(x2);
+        car2.setPosicionY(y2);
+        car3.setPosicionX(x3);
+        car3.setPosicionY(y3);
+        car1.setBounds(car1.getPosicionX(),car1.getPosicionY(),car1.getAncho(),car1.getAlto());
+        car2.setBounds(car2.getPosicionX(),car2.getPosicionY(),car2.getAncho(),car2.getAlto());
+        car3.setBounds(car3.getPosicionX(),car3.getPosicionY(),car3.getAncho(),car3.getAlto());
+    }
+
+    private void SemaforosAFalse() {
+        labelSemRojo.setVisible(false);
+        labelSemAmbar.setVisible(false);
+        labelSemVerde.setVisible(false);
     }
 
     private void EstablecerFuenteComponentes() {
