@@ -56,7 +56,7 @@ public class VentanaEleccionCocheV2 extends JFrame {
 
 
         setVisible(true);
-        setSize(295,820);
+        setSize(305,820);
         //pack(); //ajusta la ventana al tamaño necesario
         setLocationRelativeTo(laminaCarrera);
     }

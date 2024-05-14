@@ -42,9 +42,12 @@ public class LaminaCarrera extends JPanel {
     private int dineroDisponible=500;
     private int apuestaRegistrada=0;
     private Font fuente=new Font("Verdana",Font.PLAIN,14);
+    private final int X_INICIO=100;
+
+    private JButton btnMarchaAtras;
 
     public LaminaCarrera(){
-      //  EstablecerFuenteComponentes(); //Con este metodo se le puede cambiar la fuente a todos los componentes a la vez.
+
         x1=100;
         y1=340;
         x2=100;
@@ -94,20 +97,22 @@ public class LaminaCarrera extends JPanel {
         panelApuestas.add(labelVictorias);
         panelApuestas.add(labelDerrotas);
 
-//
+
 
 
         btnIniciar =new JButton("Iniciar");
         btnParar =new JButton("Parar");
         btnReanudar =new JButton("Reanudar");
         btnAcelerarFrenar =new JButton("Acelerar-Frenar?");
-
         btnReiniciar =new JButton("Reiniciar");
+        btnMarchaAtras =new JButton("Marcha Atras");
+
         btnIniciar.setEnabled(false);
         btnParar.setEnabled(false);
         btnReanudar.setEnabled(false);
         btnReiniciar.setEnabled(false);
         btnAcelerarFrenar.setEnabled(false);
+        btnMarchaAtras.setEnabled(false);
 
         btnMostrarTiempos =new JButton("Mostrar Tiempos y Apuestas");
         btnMostrarTiempos.setEnabled(false);
@@ -210,8 +215,9 @@ public class LaminaCarrera extends JPanel {
         panelbotones.add(btnReanudar,gbc.Constrains(0,13,1,1,1.0,0.0,GridBagConstraints.HORIZONTAL,GridBagConstraints.CENTER,new Insets(5,5,5,5)));
         panelbotones.add(btnAcelerarFrenar,gbc.Constrains(0,14,1,1,1.0,0.0,GridBagConstraints.HORIZONTAL,GridBagConstraints.CENTER,new Insets(5,5,5,5)));
         panelbotones.add(btnReiniciar,gbc.Constrains(0,15,1,1,1.0,0.0,GridBagConstraints.HORIZONTAL,GridBagConstraints.CENTER,new Insets(5,5,5,5)));
+        panelbotones.add(btnMarchaAtras,gbc.Constrains(0,16,1,1,1.0,0.0,GridBagConstraints.HORIZONTAL,GridBagConstraints.CENTER,new Insets(5,5,5,5)));
 
-        panelbotones.add(panelTiempos,gbc.Constrains(0,16,1,1,1.0,0.0,GridBagConstraints.HORIZONTAL,GridBagConstraints.CENTER, new Insets(5,5,5,5)));
+        panelbotones.add(panelTiempos,gbc.Constrains(0,17,1,1,1.0,0.0,GridBagConstraints.HORIZONTAL,GridBagConstraints.CENTER, new Insets(5,5,5,5)));
 
         add(panelbotones,gbc.Constrains(0,0,1,1,0.0,0.0,GridBagConstraints.BOTH,GridBagConstraints.WEST,new Insets(5,5,5,5)));
         add(panelCarrera,gbc.Constrains(1,0,4,1,1.0,1.0,GridBagConstraints.BOTH,GridBagConstraints.WEST,new Insets(5,5,5,5)));
@@ -248,21 +254,24 @@ public class LaminaCarrera extends JPanel {
 
                                 car1.Arrancar(x1,y1,anchoPanel,true);
                             }else{
-                                car1.setCarreraTerminada(true);
                                 car1.setTiempoCarrera(5000000);
+                                car1.setCarreraTerminada(true);
+
                             }
                             if(car2.isPreparado()){
                                 car2.Arrancar(x2,y2,anchoPanel,true);
                             }else{
-                                car2.setCarreraTerminada(true);
                                 car2.setTiempoCarrera(5000000);
+                                car2.setCarreraTerminada(true);
+
                             }
                             if(car3.isPreparado()){
                                 car3.Arrancar(x3,y3,anchoPanel,true);
 
                             }else{
-                                car3.setCarreraTerminada(true);
                                 car3.setTiempoCarrera(5000000);
+                                car3.setCarreraTerminada(true);
+
                             }
                             break;
                         case 3:
@@ -282,13 +291,16 @@ public class LaminaCarrera extends JPanel {
 
 
 
+
+
+
         });
 
         btnParar.addActionListener(e->{
-            car1.Parar();
+            car1.PararParaReanudar();
 
-            car2.Parar();
-            car3.Parar();
+            car2.PararParaReanudar();
+            car3.PararParaReanudar();
         });
 
         btnReanudar.addActionListener(e->{
@@ -296,6 +308,12 @@ public class LaminaCarrera extends JPanel {
             car1.ReanudarMarcha(anchoPanel);
             car2.ReanudarMarcha(anchoPanel);
             car3.ReanudarMarcha(anchoPanel);
+        });
+
+        btnMarchaAtras.addActionListener(e->{
+            car1.MarchaAtras(X_INICIO);
+            car2.MarchaAtras(X_INICIO);
+            car3.MarchaAtras(X_INICIO);
         });
 
         btnAcelerarFrenar.addActionListener(e->{
@@ -362,6 +380,7 @@ public class LaminaCarrera extends JPanel {
 
         });
         btnMostrarTiempos.addActionListener(e->{
+
             if(car1.isCarreraTerminada() && car2.isCarreraTerminada() && car3.isCarreraTerminada()){
 
                 if(car1.getTiempoCarrera()==5000000.0){
@@ -445,6 +464,7 @@ public class LaminaCarrera extends JPanel {
                 btnReanudar.setEnabled(true);
                 btnReiniciar.setEnabled(true);
                 btnAcelerarFrenar.setEnabled(true);
+                btnMarchaAtras.setEnabled(true);
 
                 btnMostrarTiempos.setEnabled(true);
             }
@@ -483,6 +503,10 @@ public class LaminaCarrera extends JPanel {
         car1.setBounds(car1.getPosicionX(),car1.getPosicionY(),car1.getAncho(),car1.getAlto());
         car2.setBounds(car2.getPosicionX(),car2.getPosicionY(),car2.getAncho(),car2.getAlto());
         car3.setBounds(car3.getPosicionX(),car3.getPosicionY(),car3.getAncho(),car3.getAlto());
+
+        car1.setCarreraTerminada(false);
+        car2.setCarreraTerminada(false);
+        car3.setCarreraTerminada(false);
     }
 
     private void SemaforosAFalse() {
@@ -491,30 +515,7 @@ public class LaminaCarrera extends JPanel {
         labelSemVerde.setVisible(false);
     }
 
-    private void EstablecerFuenteComponentes() {
-        // Obtener el UIManager actual
-        UIManager.LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
-        for (UIManager.LookAndFeelInfo look : looks) {
-            if ("Nimbus".equals(look.getName())) {
-                try {
-                    UIManager.setLookAndFeel(look.getClassName());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-        }
 
-        // Establecer la nueva fuente para todos los componentes
-        Enumeration<Object> keys = UIManager.getDefaults().keys();
-        while (keys.hasMoreElements()) {
-            Object key = keys.nextElement();
-            Object value = UIManager.get(key);
-            if (value instanceof FontUIResource) {
-                UIManager.put(key, fuente);
-            }
-        }
-    }
 
     private void CarreraPerdida() {
         JOptionPane.showMessageDialog(null,"Has Perdido :(, sigue intentandolo");
